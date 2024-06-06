@@ -1,4 +1,5 @@
 @extends('admin.admin_master')
+@section('title', 'Dashboard | ShoppingAPP - Admin')
 @section('page_content')
 
     <div class="page-content">

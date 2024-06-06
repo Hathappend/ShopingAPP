@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 use App\Http\Controllers\ProfileController;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,10 +23,14 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('admin.index');
+    $findUser = User::query()->find(Auth::user()->id);
+    return view('admin.index', ['user' => $findUser]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function (){
+    Route::get('/admin/profile', [AdminProfileController::class, 'create'])->name('admin.profile');
+    Route::get('/admin/profile/edit', [AdminProfileController::class, 'edit'])->name('admin.profile.edit');
+    Route::post('/admin/profile/edit', [AdminProfileController::class, 'postEdit'])->name('admin.profile.postEdit');
     Route::post('/admin/logout', [AdminController::class, 'destroy'])->name('admin.logout');
 });
 
