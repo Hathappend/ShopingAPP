@@ -46,26 +46,12 @@
 
     <!-- Alert section -->
     @if(session()->has('success'))
-        <script>
-            const Toast = Swal.mixin({
-              toast: true,
-              position: 'top-end',
-              iconColor: 'white',
-              customClass: {
-                popup: 'colored-toast',
-              },
-              showConfirmButton: false,
-              timer: 3000,
-              timerProgressBar: true,
-            })
-
-            ;(async () => {
-              await Toast.fire({
-                icon: 'success',
-                title: '{{ session()->get('success') }}',
-              })
-            })()
-        </script>
+        @section('import_custom_script')
+            <script src="{{ asset('backend/assets/js/notification.js') }}"></script>
+            <script>
+                success('{{ session()->get('success') }}');
+            </script>
+        @endsection
     @endif
 
 @endsection

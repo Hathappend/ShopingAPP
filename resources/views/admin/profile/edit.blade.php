@@ -77,7 +77,7 @@
     </section>
 
     @section('import_custom_script')
-        <script src="{{ asset('backend/assets/js/profile.js') }}"></script>
+        <script src="{{ asset('backend/assets/js/script.js') }}"></script>
         <script>
 
             showImageByUserInput()
