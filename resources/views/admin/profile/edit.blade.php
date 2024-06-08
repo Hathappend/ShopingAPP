@@ -54,7 +54,7 @@
 
                                     </div>
                                     <div class="mb-3">
-                                        <img id="showImage" src='{{ asset("storage/img/admin/profile/{$user->profile_image}") }}' class="rounded img-thumbnail" alt="Card Image Cap">
+                                        <img id="showImage" src='{{ !empty($user->profile_image) ? asset("storage/img/admin/profile/{$user->profile_image}") : asset("storage/img/no-image-available.jpeg") }}' class="rounded img-thumbnail" alt="Card Image Cap">
                                     </div>
                                     <div class="mb-0">
                                         <div>
