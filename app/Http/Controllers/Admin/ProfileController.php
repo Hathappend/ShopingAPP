@@ -8,6 +8,7 @@ use App\Services\Admin\ProfileService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -48,13 +49,8 @@ class ProfileController extends Controller
         $data = $request->except('_token');
         $changes = [];
         foreach ($data as $attr => $value) {
-            if ($attr == 'profile_image' && $value->getClientOriginalName() !== $user->$attr) {
-                $changes[$attr] = time().'_'.$value->getClientOriginalName();
-            }else{
-
-                if ($value !== $user->$attr) {
-                    $changes[$attr] = $value;
-                }
+            if ($attr == 'profile_image' && $value->getClientOriginalName() !== $user->profile_image) {
+                $changes[$attr] = ($attr != 'profile_image') ? $value : time() . '_' . $value->getClientOriginalName();
             }
         }
 
@@ -62,6 +58,7 @@ class ProfileController extends Controller
             $result = $this->profileService->update($changes);
             if ($result) {
                 if (!empty($changes['profile_image'])) {
+                    Storage::delete("public/img/admin/profile/{$user->profile_image}");
                     $data['profile_image']->storePubliclyAs('/img/admin/profile', $changes['profile_image'], 'public');
                 }
                 return redirect()->route('admin.profile')->with('success', 'Profile saved.');
