@@ -20,12 +20,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('frontend.index');
+    $homeslide = \App\Models\HomeSlide::find(1);
+
+    return view('frontend.index', compact(
+        'homeslide'
+    ));
 });
 
 Route::get('/dashboard', function () {
-    $findUser = User::query()->find(Auth::user()->id);
-    return view('admin.index', ['user' => $findUser]);
+    return view('admin.index', ['user' => Auth::user()]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 // Admin All Route
@@ -38,7 +41,8 @@ Route::middleware(['auth', 'shareUserAuth'])->group(function (){
     Route::post('/admin/logout', [AdminController::class, 'destroy'])->name('admin.logout');
 
     // Home Slide Route
-    Route::get('/home/slide', [HomeSliderController::class, 'HomeSlider'])->name('home.slide');
+    Route::get('/home/slide', [HomeSliderController::class, 'homeSlider'])->name('admin.home.slide');
+    Route::post('/update/slide', [HomeSliderController::class, 'updateSlider'])->name('admin.update.slider');
 });
 
 Route::middleware('auth')->group(function () {
